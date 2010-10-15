@@ -1,7 +1,7 @@
 Running Your Test Cases in Isolation
 ====================================
 
-The RSpec examples are generally run in a single ruby process. It dosen't matter until your code introduces some **global variables**, which would **be polluted between examples**. A common solution is to reset them in the `after` hook, but it broken the DRY rule and would bring a lots of extra works. The best way is to **run them in separated sub processes**. This gem would help you to achieve this within a single method call.
+The RSpec examples are generally run in a single ruby process. It dosen't matter until your code introduces some **global variables**, which would **be polluted between examples**. A common solution is to reset them in the after hook, but it breaks the DRY rule and would brings a lots of extra works. The best way is to **run them in separated sub processes**. This gem would help you to achieve this within a single method call.
 
 Dependency
 ----------
@@ -57,7 +57,7 @@ Then you can choose one of the following ways to enable the isolation:
 		end
 	end
 		
-	This would run the first example in a sub process.
+This would run the first example in a sub process.
 	
 **2. Using `run_in_isolation` in `before(:each)` hook:**
 
@@ -79,8 +79,7 @@ Then you can choose one of the following ways to enable the isolation:
 		end
 	end
 		
-	This would run all examples in separated sub process. Note: It does not work 
-	if you put `run_in_isolation` in a `before(:all)` hook.
+This would run all examples in separated sub process. **Note: It does not work if you put `run_in_isolation` in a `before(:all)` hook.**
 	
 Author
 ------

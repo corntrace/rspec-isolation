@@ -21,5 +21,5 @@ Gem::Specification.new do |s|
   s.executables  = `git ls-files`.split("\n").select{|f| f =~ /^bin/}
   s.require_path = 'lib'
   
-  s.add_dependency("rspec", ["~> 2.0.0"])
+  # s.add_dependency("rspec", ["~> 2.0.0"])
 end
