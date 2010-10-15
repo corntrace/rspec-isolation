@@ -1,11 +1,11 @@
 Running Your Test Cases in Isolation
 ====================================
 
-The RSpec examples are generally run in a single ruby process. It dosen't matter until your code introduces some **global variables**, which would **be polluted between examples**. A common solution is to reset them in the `after` hook, but it broken the DRY rule and would bring a lots of extra works. The best way is to **run them in separated sub processes**. This gem would help you to achieve this within a single method call.
+The RSpec examples are generally run in a single ruby process. It dosen't matter until your code introduces some **global variables**, which would **be polluted between examples**. A common solution is to reset them in the after hook, but it breaks the DRY rule and would brings a lots of extra works. The best way is to **run them in separated sub processes**. This gem would help you to achieve this within a single method call.
 
 Dependency
 ----------
-This gem is depended on Rspec 2.0 and above. You should have it installed before using this gem.
+This gem depends on Rspec 2.0 and above. You should have it installed before using this gem.
 
 Installation
 ------------
@@ -21,12 +21,12 @@ Image a spec file exists:
 	$greeting = "Hello, world!"
 
 	describe "Test with global vars" do
-		it "should be replace with my name" do
+		it "should be replaced with my name" do
 			$greeting.gsub!(/\bworld\b/, "Kevin")
 			$greeting.should == "Hello, Kevin!"
 		end
 
-		it "should be replace with my hometown name" do
+		it "should be replaced with my hometown name" do
 		  $greeting.gsub!(/\bworld\b/, "Wuhan")
 		  $greeting.should == "Hello, Wuhan!"
 		end
@@ -46,18 +46,18 @@ Then you can choose one of the following ways to enable the isolation:
 	$greeting = "Hello, world!"
 
 	describe "Test with global vars" do
-		iso_it "should be replace with my name" do
+		iso_it "should be replaced with my name" do
 			$greeting.gsub!(/\bworld\b/, "Kevin")
 			$greeting.should == "Hello, Kevin!"
 		end
 
-		it "should be replace with my hometown name" do
+		it "should be replaced with my hometown name" do
 		  $greeting.gsub!(/\bworld\b/, "Wuhan")
 		  $greeting.should == "Hello, Wuhan!"
 		end
 	end
 		
-	This would run the first example in a sub process.
+Now the first example would be run in a sub process.
 	
 **2. Using `run_in_isolation` in `before(:each)` hook:**
 
@@ -68,19 +68,18 @@ Then you can choose one of the following ways to enable the isolation:
 		before(:each) do
 			run_in_isolation
 		end
-		it "should be replace with my name" do
+		it "should be replaced with my name" do
 			$greeting.gsub!(/\bworld\b/, "Kevin")
 			$greeting.should == "Hello, Kevin!"
 		end
 
-		it "should be replace with my hometown name" do
+		it "should be replaced with my hometown name" do
 		  $greeting.gsub!(/\bworld\b/, "Wuhan")
 		  $greeting.should == "Hello, Wuhan!"
 		end
 	end
 		
-	This would run all examples in separated sub process. Note: It does not work 
-	if you put `run_in_isolation` in a `before(:all)` hook.
+Now all examples would be run in separated sub processes. **Note: It won't work if you put `run_in_isolation` in a `before(:all)` hook.**
 	
 Author
 ------
