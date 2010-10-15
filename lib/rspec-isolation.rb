@@ -1,0 +1,3 @@
+module Rspec::Isolation
+  # Your code goes here...
+end
