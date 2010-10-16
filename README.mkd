@@ -83,5 +83,4 @@ Now all examples would be run in separated sub processes. **Note: It won't work 
 	
 Author
 ------
-Kevin Fu, corntrace@gmail.com, @corntrace. If you like and use this gem, please feel free to give me any
-recommandation.
+Kevin Fu, corntrace@gmail.com, @corntrace. If you like and use this gem, please feel free to give me any recommandation.
