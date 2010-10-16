@@ -18,65 +18,65 @@ Usage
 ----------
 Image a spec file exists:
 
-	$greeting = "Hello, world!"
+    $greeting = "Hello, world!"
 
-	describe "Test with global vars" do
-		it "should be replaced with my name" do
-			$greeting.gsub!(/\bworld\b/, "Kevin")
-			$greeting.should == "Hello, Kevin!"
-		end
+    describe "Test with global vars" do
+      it "should be replaced with my name" do
+        $greeting.gsub!(/\bworld\b/, "Kevin")
+        $greeting.should == "Hello, Kevin!"
+      end
 
-		it "should be replaced with my hometown name" do
-		  $greeting.gsub!(/\bworld\b/, "Wuhan")
-		  $greeting.should == "Hello, Wuhan!"
-		end
-	end
+      it "should be replaced with my hometown name" do
+        $greeting.gsub!(/\bworld\b/, "Wuhan")
+        $greeting.should == "Hello, Wuhan!"
+      end
+    end
 		
 The `$greeting` is polluted in the first example and the second example would failed.
 
 Now we require this gem:
 
-	require 'rspec/isolation'
+    require 'rspec/isolation'
 		
 Then you can choose one of the following ways to enable the isolation:
 
 **1. Using `iso_it`:**
 
-	require 'rspec/isolation'
-	$greeting = "Hello, world!"
+    require 'rspec/isolation'
+    $greeting = "Hello, world!"
 
-	describe "Test with global vars" do
-		iso_it "should be replaced with my name" do
-			$greeting.gsub!(/\bworld\b/, "Kevin")
-			$greeting.should == "Hello, Kevin!"
-		end
+    describe "Test with global vars" do
+      iso_it "should be replaced with my name" do
+        $greeting.gsub!(/\bworld\b/, "Kevin")
+        $greeting.should == "Hello, Kevin!"
+      end
 
-		it "should be replaced with my hometown name" do
-		  $greeting.gsub!(/\bworld\b/, "Wuhan")
-		  $greeting.should == "Hello, Wuhan!"
-		end
-	end
+      it "should be replaced with my hometown name" do
+        $greeting.gsub!(/\bworld\b/, "Wuhan")
+        $greeting.should == "Hello, Wuhan!"
+      end
+    end
 		
 Now the first example would be run in a sub process.
 	
 **2. Using `run_in_isolation` in `before(:each)` hook:**
 
-	require 'rspec/isolation'
-	$greeting = "Hello, world!"
+    require 'rspec/isolation'
+    $greeting = "Hello, world!"
 
-	describe "Test with global vars" do
-		before(:each) do
-			run_in_isolation
-		end
-		it "should be replaced with my name" do
-			$greeting.gsub!(/\bworld\b/, "Kevin")
-			$greeting.should == "Hello, Kevin!"
-		end
+    describe "Test with global vars" do
+      before(:each) do
+        run_in_isolation
+      end
+      it "should be replaced with my name" do
+        $greeting.gsub!(/\bworld\b/, "Kevin")
+        $greeting.should == "Hello, Kevin!"
+      end
 
-		it "should be replaced with my hometown name" do
-		  $greeting.gsub!(/\bworld\b/, "Wuhan")
-		  $greeting.should == "Hello, Wuhan!"
-		end
+      it "should be replaced with my hometown name" do
+        $greeting.gsub!(/\bworld\b/, "Wuhan")
+        $greeting.should == "Hello, Wuhan!"
+      end
 	end
 		
 Now all examples would be run in separated sub processes. **Note: It won't work if you put `run_in_isolation` in a `before(:all)` hook.**
