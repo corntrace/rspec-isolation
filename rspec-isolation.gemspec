@@ -15,7 +15,8 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.3.6"
 
-  s.add_development_dependency "bundler", ">= 1.0.0.rc.5"
+  s.add_development_dependency "bundler", ">= 1.0.2"
+  s.add_development_dependency "rspec", ">=2.0.0"
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").select{|f| f =~ /^bin/}
