@@ -26,14 +26,14 @@ describe "#isolation" do
       example = group.iso_it('example') { 1.should == 2 }
 
       group.run
-      example.metadata[:execution_result][:exception_encountered].message.should == "expected: 2,\n     got: 1 (using ==)"
+      example.should have_encountered_exception(/expected: 2,?\s+ got: 1 \(using ==\)/)
     end
     it "should capture exceptions" do
       group = RSpec::Core::ExampleGroup.describe
       example = group.iso_it('example') { raise "FOO" }
 
       group.run
-      example.metadata[:execution_result][:exception_encountered].message.should == "FOO"
+      example.should have_encountered_exception("FOO")
     end
   end
   context "complicated conditions" do
@@ -46,14 +46,14 @@ describe "#isolation" do
       end
     end
     it "should raise error if run in the same process" do
-      group = RSpec::Core::ExampleGroup.describe do
+      group = RSpec::Core::ExampleGroup.describe "test" do
         $test_counter = 0
-        example {once_then_raise_error}
-        example {once_then_raise_error}
+        it "test" do once_then_raise_error end
+        it "test" do once_then_raise_error end
       end
       group.run
-      group.examples[0].metadata[:execution_result][:exception_encountered].should be_nil
-      group.examples[1].metadata[:execution_result][:exception_encountered].message.should == "In the same process"
+      group.examples[0].should_not have_encountered_exception
+      group.examples[1].should     have_encountered_exception("In the same process")
     end
     it "should not raise if ran in isolation" do
       group = RSpec::Core::ExampleGroup.describe do
@@ -63,8 +63,8 @@ describe "#isolation" do
         example {once_then_raise_error}
       end
       group.run
-      group.examples[0].metadata[:execution_result][:exception_encountered].should be_nil
-      group.examples[0].metadata[:execution_result][:exception_encountered].should be_nil
+      group.examples[0].should_not have_encountered_exception
+      group.examples[1].should_not have_encountered_exception
     end
   end
 end
