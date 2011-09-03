@@ -1,26 +1,9 @@
+require 'bundler/setup'
 require 'rspec/isolation'
 
-# Dir['./spec/support/**/*.rb'].map {|f| require f}
+RSPEC_VERSION = defined?(RSpec::Core::Version::STRING) && RSpec::Core::Version::STRING
 
-module RSpec
-  module Core
-    module Matchers
-      def fail
-        raise_error(::RSpec::Expectations::ExpectationNotMetError)
-      end
-
-      def fail_with(message)
-        raise_error(::RSpec::Expectations::ExpectationNotMetError, message)
-      end
-    end
-  end
-end
-
-class NullObject
-  def method_missing(method, *args, &block)
-    # ignore
-  end
-end
+Dir['./spec/support/**/*.rb'].map {|f| require f}
 
 def sandboxed(&block)
   begin
@@ -32,8 +15,10 @@ def sandboxed(&block)
     RSpec.instance_variable_set(:@configuration, new_config)
     RSpec.instance_variable_set(:@world, new_world)
     object = Object.new
-    object.extend(RSpec::Core::ObjectExtensions)
-    object.extend(RSpec::Core::SharedExampleGroup)
+    if RSPEC_VERSION < "2.6"
+      object.extend(RSpec::Core::ObjectExtensions)
+      object.extend(RSpec::Core::SharedExampleGroup)
+    end
 
     (class << RSpec::Core::ExampleGroup; self; end).class_eval do
       alias_method :orig_run, :run
@@ -50,8 +35,10 @@ def sandboxed(&block)
   ensure
     (class << RSpec::Core::ExampleGroup; self; end).class_eval do
       remove_method :run
-      alias_method :run, :orig_run
-      remove_method :orig_run
+      if method_defined?(:orig_run)
+        alias_method :run, :orig_run
+        remove_method :orig_run
+      end
     end
 
     RSpec.instance_variable_set(:@configuration, @orig_config)
@@ -64,6 +51,7 @@ def in_editor?
 end
 
 RSpec.configure do |c|
+  c.include RSpecIsolationSpecMatchers
   c.color_enabled = !in_editor?
   c.filter_run :focused => true
   c.run_all_when_everything_filtered = true
